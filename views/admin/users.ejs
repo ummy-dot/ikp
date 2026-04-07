@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">🏥</div>
+                <div class="logo-text">
+                    <h2>Laporan IKP</h2><span>Keselamatan Pasien</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Admin</div>
+                <a href="/admin/dashboard" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+                <a href="/admin/laporan" class="nav-item"><span class="nav-icon">📋</span> Daftar Laporan</a>
+                <a href="/admin/users" class="nav-item active"><span class="nav-icon">👥</span> Manajemen User</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-avatar">
+                    <%= user.name[0].toUpperCase() %>
+                </div>
+                <div class="user-info">
+                    <div class="name">
+                        <%= user.name %>
+                    </div>
+                    <div class="role">🛡️ Administrator</div>
+                </div>
+                <a href="/auth/logout" style="margin-left:auto;color:var(--danger);text-decoration:none;">🚪</a>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1>👥 Manajemen User</h1>
+                    <p>Kelola akun pengguna sistem IKP</p>
+                </div>
+            </div>
+            <% if (success && success.length> 0) { %><div class="alert alert-success">✅ <%= success[0] %>
+                </div>
+                <% } %>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Terdaftar</th>
+                                    <th>Ganti Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.forEach((u, i)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= i + 1 %>
+                                        </td>
+                                        <td>
+                                            <div style="display:flex;align-items:center;gap:0.6rem">
+                                                <div
+                                                    style="width:32px;height:32px;background:linear-gradient(135deg,#14b8a6,#6366f1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0">
+                                                    <%= u.name[0].toUpperCase() %>
+                                                </div>
+                                                <%= u.name %>
+                                            </div>
+                                        </td>
+                                        <td><span style="font-size:0.85rem;color:var(--text-muted)">
+                                                <%= u.email %>
+                                            </span></td>
+                                        <td><span
+                                                class="badge <%= u.role === 'admin' ? 'badge-merah' : 'badge-biru' %>">
+                                                <%= u.role %>
+                                            </span></td>
+                                        <td style="font-size:0.8rem;color:var(--text-muted)">
+                                            <%= new Date(u.created_at).toLocaleDateString('id-ID') %>
+                                        </td>
+                                        <td>
+                                            <% if (u.id !==user.id) { %>
+                                                <form method="POST" action="/admin/users/<%= u.id %>/role"
+                                                    style="display:flex;gap:0.5rem;align-items:center">
+                                                    <select name="role" class="form-control"
+                                                        style="width:auto;padding:0.35rem 0.7rem;font-size:0.8rem">
+                                                        <option value="user" <%=u.role==='user' ? 'selected' : '' %>
+                                                            >user</option>
+                                                        <option value="admin" <%=u.role==='admin' ? 'selected' : '' %>
+                                                            >admin</option>
+                                                    </select>
+                                                    <button type="submit"
+                                                        class="btn btn-secondary btn-sm">Simpan</button>
+                                                </form>
+                                                <% } else { %><span style="font-size:0.8rem;color:var(--text-dim)">Akun
+                                                        Anda</span>
+                                                    <% } %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+        </main>
+    </div>
+</body>
+
+</html>

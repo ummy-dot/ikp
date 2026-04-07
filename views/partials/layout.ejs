@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title || 'IKP' %>
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">🏥</div>
+                <div class="logo-text">
+                    <h2>Laporan IKP</h2>
+                    <span>Keselamatan Pasien</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <% if (user && user.role==='admin' ) { %>
+                    <div class="nav-section-label">Admin</div>
+                    <a href="/admin/dashboard" class="nav-item <%= path === '/admin/dashboard' ? 'active' : '' %>">
+                        <span class="nav-icon">📊</span> Dashboard
+                    </a>
+                    <a href="/admin/laporan"
+                        class="nav-item <%= path && path.startsWith('/admin/laporan') ? 'active' : '' %>">
+                        <span class="nav-icon">📋</span> Daftar Laporan
+                    </a>
+                    <a href="/admin/users" class="nav-item <%= path === '/admin/users' ? 'active' : '' %>">
+                        <span class="nav-icon">👥</span> Manajemen User
+                    </a>
+                    <% } else { %>
+                        <div class="nav-section-label">Pelapor</div>
+                        <a href="/user/dashboard" class="nav-item <%= path === '/user/dashboard' ? 'active' : '' %>">
+                            <span class="nav-icon">📊</span> Dashboard
+                        </a>
+                        <a href="/user/form" class="nav-item <%= path === '/user/form' ? 'active' : '' %>">
+                            <span class="nav-icon">📝</span> Buat Laporan
+                        </a>
+                        <a href="/user/riwayat" class="nav-item <%= path === '/user/riwayat' ? 'active' : '' %>">
+                            <span class="nav-icon">🕐</span> Riwayat Laporan
+                        </a>
+                        <% } %>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-avatar">
+                    <%= user ? user.name[0].toUpperCase() : '?' %>
+                </div>
+                <div class="user-info">
+                    <div class="name">
+                        <%= user ? user.name : '-' %>
+                    </div>
+                    <div class="role">
+                        <%= user && user.role==='admin' ? '🛡️ Administrator' : '👤 Pelapor' %>
+                    </div>
+                </div>
+                <a href="/auth/logout" class="logout ms-auto" style="margin-left:auto" title="Logout">🚪</a>
+            </div>
+        </aside>
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <%- body %>
+        </main>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
